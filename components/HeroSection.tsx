@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ShoppingCart, ArrowRight, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { PRODUCTS } from '../data/products';
 
@@ -34,25 +35,50 @@ export function HeroSection() {
             sizes="100vw"
           />
 
-          {/* Hotspot 1: Explore Products Link Button */}
+          {/* Feature Badges Interactive Polish Layer */}
+          <div className="absolute left-[8.0%] top-[52.0%] w-[38.0%] h-[13.0%] grid grid-cols-6 gap-1 z-20 pointer-events-auto">
+            {[
+              { label: '100% Natural Minerals', desc: 'Infused with 72+ bio-available trace minerals' },
+              { label: 'Chemical Free', desc: 'No synthetic binders or harsh chemicals' },
+              { label: 'No Electricity Needed', desc: 'Zero power consumption & eco-friendly' },
+              { label: 'Lab Certified Quality', desc: 'Tested & certified for pure alkaline water' },
+              { label: 'Safe for Whole Family', desc: 'Healthy hydration for children, adults & seniors' },
+              { label: 'Zero Maintenance', desc: 'Long-lasting natural mineral core' },
+            ].map((f, idx) => (
+              <div
+                key={idx}
+                className="group relative flex flex-col items-center justify-center cursor-pointer rounded-2xl hover:bg-emerald-50/30 transition-all"
+                title={`${f.label} • ${f.desc}`}
+              >
+                <div className="absolute inset-0 rounded-2xl border border-emerald-500/0 group-hover:border-emerald-500/50 group-hover:shadow-md group-hover:shadow-emerald-900/10 transition-all pointer-events-none" />
+              </div>
+            ))}
+          </div>
+
+          {/* Button 1: Explore Products (Real Ultra-Premium Glowing Button) */}
           <Link
             href="#products"
-            className="absolute left-[8.4%] top-[68.0%] w-[14.5%] h-[7.0%] rounded-full cursor-pointer z-20 group transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="absolute left-[8.2%] top-[67.2%] w-[14.8%] h-[7.4%] rounded-full bg-gradient-to-r from-[#033615] via-[#065f28] to-[#033615] text-white font-extrabold text-[11px] sm:text-xs lg:text-sm xl:text-base flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/30 hover:shadow-2xl hover:shadow-emerald-900/50 hover:scale-[1.03] active:scale-[0.98] transition-all z-20 group border border-emerald-400/40 overflow-hidden select-none"
             title="Explore Healthy Buddy Products"
-            aria-label="Explore Products"
           >
-            <span className="sr-only">Explore Products</span>
+            {/* Shimmer light sweep reflection */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+            <span className="tracking-wide">Explore Products</span>
+            <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
 
-          {/* Hotspot 2: Order Alkaline Device Button */}
+          {/* Button 2: Order Alkaline Device • ₹13,999 (Real Glassmorphic Button with Correct ₹13,999 Price) */}
           <button
             type="button"
             onClick={handleAddToCart}
-            className="absolute left-[23.9%] top-[68.0%] w-[21.8%] h-[7.0%] rounded-full cursor-pointer z-20 group transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="absolute left-[23.7%] top-[67.2%] w-[22.2%] h-[7.4%] rounded-full bg-white hover:bg-[#f6fcf8] border-2 border-[#065f28] text-gray-900 font-extrabold text-[11px] sm:text-xs lg:text-sm xl:text-base flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/15 hover:shadow-2xl hover:shadow-emerald-900/30 hover:scale-[1.03] active:scale-[0.98] transition-all z-20 group select-none"
             title="Order Alkaline Device • ₹13,999"
-            aria-label="Order Alkaline Device"
           >
-            <span className="sr-only">Order Alkaline Device • ₹13,999</span>
+            <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full bg-emerald-50 flex items-center justify-center text-[#065f28] flex-shrink-0 group-hover:scale-110 transition-transform">
+              <ShoppingCart size={15} className="text-[#065f28]" />
+            </div>
+            <span className="text-gray-900 tracking-tight">Order Alkaline Device</span>
+            <span className="text-[#065f28] font-black tracking-tight">₹13,999</span>
           </button>
 
           {/* Hotspot 3: Alkaline Product on Mossy Rock */}
@@ -106,25 +132,23 @@ export function HeroSection() {
             sizes="100vw"
           />
 
-          {/* Hotspot 1: Explore Products Button */}
+          {/* Mobile Button 1: Explore Products (Real Glowing Button) */}
           <Link
             href="#products"
-            className="absolute left-[6.0%] top-[83.5%] w-[88.0%] h-[5.7%] rounded-full cursor-pointer z-20 group transition-transform active:scale-[0.98]"
-            title="Explore Healthy Buddy Products"
-            aria-label="Explore Products"
+            className="absolute left-[5.5%] top-[83.0%] w-[89.0%] h-[6.0%] rounded-full bg-gradient-to-r from-[#033615] via-[#065f28] to-[#033615] text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/30 active:scale-[0.97] transition-all z-20 border border-emerald-400/40 select-none overflow-hidden"
           >
-            <span className="sr-only">Explore Products</span>
+            <span>Explore Products</span>
+            <ArrowRight size={17} />
           </Link>
 
-          {/* Hotspot 2: Order Alkaline Device Button */}
+          {/* Mobile Button 2: Order Alkaline Device • ₹13,999 (Real Button with Correct ₹13,999 Price) */}
           <button
             type="button"
             onClick={handleAddToCart}
-            className="absolute left-[6.0%] top-[90.0%] w-[88.0%] h-[5.5%] rounded-full cursor-pointer z-20 group transition-transform active:scale-[0.98]"
-            title="Order Alkaline Device • ₹13,999"
-            aria-label="Order Alkaline Device"
+            className="absolute left-[5.5%] top-[89.8%] w-[89.0%] h-[6.0%] rounded-full bg-white border-2 border-[#065f28] text-gray-900 font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/15 active:scale-[0.97] transition-all z-20 select-none"
           >
-            <span className="sr-only">Order Alkaline Device • ₹13,999</span>
+            <ShoppingCart size={17} className="text-[#065f28]" />
+            <span>Order Alkaline Device • <strong className="text-[#065f28] font-black">₹13,999</strong></span>
           </button>
 
           {/* Hotspot 3: Alkaline Product on Mossy Rock */}
