@@ -13,6 +13,8 @@ import {
   Truck,
   CheckCircle,
   ArrowRight,
+  Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { OrderCustomerDetails } from '../types';
@@ -29,6 +31,13 @@ export function CartDrawer() {
     subtotal,
     count,
     sendWhatsAppOrder,
+    isFirstTimeCustomer,
+    isCheckingCustomer,
+    applyFirstTimeDiscount,
+    setApplyFirstTimeDiscount,
+    checkPhoneNumber,
+    discountAmount,
+    finalTotal,
   } = useCart();
 
   const [customer, setCustomer] = useState<OrderCustomerDetails>({
@@ -53,6 +62,23 @@ export function CartDrawer() {
     };
   }, [isCartOpen]);
 
+  // Handle phone change & check eligibility
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomer((prev) => ({ ...prev, phone: val }));
+    const digits = val.replace(/\D/g, '');
+    if (digits.length >= 10) {
+      checkPhoneNumber(digits);
+    }
+  };
+
+  const handlePhoneBlur = () => {
+    const digits = customer.phone.replace(/\D/g, '');
+    if (digits.length >= 10) {
+      checkPhoneNumber(digits);
+    }
+  };
+
   if (!isCartOpen) return null;
 
   const handleCheckout = (e: React.FormEvent) => {
@@ -61,7 +87,7 @@ export function CartDrawer() {
       setFormErrors('Please fill in your Name, Phone Number, and Address to proceed.');
       return;
     }
-    if (customer.phone.trim().length < 10) {
+    if (customer.phone.replace(/\D/g, '').length < 10) {
       setFormErrors('Please enter a valid 10-digit phone number.');
       return;
     }
@@ -69,6 +95,8 @@ export function CartDrawer() {
     setFormErrors(null);
     sendWhatsAppOrder(customer);
   };
+
+  const phoneDigits = customer.phone.replace(/\D/g, '');
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -161,6 +189,7 @@ export function CartDrawer() {
                             type="button"
                             onClick={() => decrement(item.id)}
                             className="p-1 hover:text-red-600 transition-colors"
+                            aria-label="Decrease quantity"
                           >
                             <Minus size={12} strokeWidth={2.5} />
                           </button>
@@ -171,6 +200,7 @@ export function CartDrawer() {
                             type="button"
                             onClick={() => increment(item.id)}
                             className="p-1 hover:text-brand-primary transition-colors"
+                            aria-label="Increase quantity"
                           >
                             <Plus size={12} strokeWidth={2.5} />
                           </button>
@@ -181,6 +211,7 @@ export function CartDrawer() {
                           onClick={() => removeItem(item.id)}
                           className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
                           title="Remove item"
+                          aria-label="Remove item"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -193,7 +224,7 @@ export function CartDrawer() {
                 <div className="mt-6 pt-4 border-t border-gray-100">
                   <h3 className="text-xs uppercase font-extrabold tracking-wider text-gray-700 mb-3 flex items-center gap-1.5">
                     <Truck size={14} className="text-brand-primary" />
-                    Delivery Information
+                    Delivery Information &amp; Instant Offer
                   </h3>
 
                   {formErrors && (
@@ -203,31 +234,101 @@ export function CartDrawer() {
                     </div>
                   )}
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     <input
                       type="text"
                       placeholder="Your Full Name *"
                       value={customer.name}
                       onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                      className="w-full px-3.5 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                       required
                     />
 
-                    <input
-                      type="tel"
-                      placeholder="WhatsApp / Phone Number (10 digits) *"
-                      value={customer.phone}
-                      onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-                      className="w-full px-3.5 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        placeholder="WhatsApp / Phone Number (10 digits) *"
+                        value={customer.phone}
+                        onChange={handlePhoneChange}
+                        onBlur={handlePhoneBlur}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary pr-9"
+                        required
+                      />
+                      {isCheckingCustomer && (
+                        <div className="absolute right-3 top-3 text-emerald-600 animate-spin">
+                          <Loader2 size={16} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ============ AUTOMATIC 1ST-TIME BUYER DISCOUNT BOX ============ */}
+                    {phoneDigits.length < 10 ? (
+                      <div className="p-2.5 rounded-xl bg-emerald-50/50 border border-dashed border-emerald-200 text-[11px] text-emerald-800 flex items-center gap-2">
+                        <Sparkles size={14} className="text-emerald-600 flex-shrink-0 animate-pulse" />
+                        <span>
+                          Enter 10-digit WhatsApp number above to check <strong>10% First-Time Buyer Discount</strong>!
+                        </span>
+                      </div>
+                    ) : isFirstTimeCustomer === true ? (
+                      /* ELIGIBLE: CHECKBOX ENABLED & CLICKABLE */
+                      <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 via-[#f0fbf4] to-emerald-50 border border-emerald-300 shadow-2xs">
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            id="firstTimeDiscountToggle"
+                            checked={applyFirstTimeDiscount}
+                            onChange={(e) => setApplyFirstTimeDiscount(e.target.checked)}
+                            className="mt-0.5 w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 cursor-pointer accent-[#065f28]"
+                          />
+                          <label htmlFor="firstTimeDiscountToggle" className="cursor-pointer flex-1 select-none">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-xs font-black text-gray-900">
+                                Apply 1st Time Order Discount (10% OFF)
+                              </span>
+                              <span className="px-2 py-0.5 rounded-full bg-[#065f28] text-white text-[10px] font-extrabold uppercase shadow-2xs">
+                                Save ₹{discountAmount.toLocaleString('en-IN')}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-emerald-800 mt-1 leading-snug">
+                              🎉 <strong>Verified New Customer!</strong> Click checkbox to apply 10% instant savings on your first purchase.
+                            </p>
+                          </label>
+                        </div>
+                      </div>
+                    ) : isFirstTimeCustomer === false ? (
+                      /* RETURNING CUSTOMER: CHECKBOX DISABLED */
+                      <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-amber-950 shadow-2xs">
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            id="firstTimeDiscountDisabled"
+                            checked={false}
+                            disabled
+                            className="mt-0.5 w-4 h-4 text-gray-400 rounded border-gray-300 cursor-not-allowed opacity-50"
+                          />
+                          <div className="flex-1 select-none">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-xs font-bold text-gray-700">
+                                1st Time Order Discount (10% OFF)
+                              </span>
+                              <span className="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-bold">
+                                Returning Customer
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-amber-800 mt-1 leading-snug">
+                              ⚠️ This phone number has already ordered previously. 1st-time discount is applicable for your first order only.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
 
                     <textarea
                       placeholder="Delivery Address (House/Street/City) *"
                       value={customer.address}
                       onChange={(e) => setCustomer({ ...customer, address: e.target.value })}
                       rows={2}
-                      className="w-full px-3.5 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none"
                       required
                     />
 
@@ -263,17 +364,37 @@ export function CartDrawer() {
                     ₹{subtotal.toLocaleString('en-IN')}
                   </span>
                 </div>
+
+                {/* 1st Time Order Discount Row */}
+                {isFirstTimeCustomer === true && applyFirstTimeDiscount && (
+                  <div className="flex justify-between text-emerald-800 font-bold bg-emerald-100/70 px-2.5 py-1.5 rounded-xl border border-emerald-200">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles size={13} className="text-emerald-700" />
+                      1st Order Discount (10% OFF)
+                    </span>
+                    <span className="text-[#065f28]">-₹{discountAmount.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+
                 <div className="flex justify-between">
                   <span className="flex items-center gap-1 text-brand-primary font-medium">
                     <CheckCircle size={12} /> Direct Brand Delivery
                   </span>
                   <span className="font-semibold text-brand-primary">Free Delivery</span>
                 </div>
-                <div className="flex justify-between text-base font-extrabold text-gray-900 pt-2 border-t border-gray-200">
+
+                <div className="flex justify-between text-base font-extrabold text-gray-900 pt-2 border-t border-gray-200 items-baseline">
                   <span>Total Payable:</span>
-                  <span className="text-brand-primary text-xl">
-                    ₹{subtotal.toLocaleString('en-IN')}
-                  </span>
+                  <div className="text-right">
+                    {isFirstTimeCustomer === true && applyFirstTimeDiscount && (
+                      <span className="text-xs text-gray-400 line-through mr-2 font-normal">
+                        ₹{subtotal.toLocaleString('en-IN')}
+                      </span>
+                    )}
+                    <span className="text-brand-primary text-xl font-black">
+                      ₹{finalTotal.toLocaleString('en-IN')}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -284,12 +405,12 @@ export function CartDrawer() {
                 className="w-full py-3.5 px-4 rounded-2xl bg-brand-primary hover:bg-brand-dark text-white font-bold text-sm shadow-xl shadow-brand-primary/25 hover:shadow-2xl transition-all flex items-center justify-center gap-2 active:scale-98"
               >
                 <MessageCircle size={18} />
-                <span>Place Order via WhatsApp</span>
+                <span>Place Order via WhatsApp • ₹{finalTotal.toLocaleString('en-IN')}</span>
                 <ArrowRight size={16} />
               </button>
 
               <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1">
-                <span>🔒 Safe & Direct Order Booking</span>
+                <span>🔒 Safe &amp; Direct Order Booking</span>
                 <button
                   type="button"
                   onClick={clearCart}

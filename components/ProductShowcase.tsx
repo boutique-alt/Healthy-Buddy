@@ -390,6 +390,17 @@ export function ProductShowcase() {
                   <span>Special Launch Offer</span>
                 </div>
               </div>
+
+              {/* First Time Order Instant Discount Callout */}
+              <div className="mt-3 pt-2.5 border-t border-emerald-200/70 flex items-center justify-between text-xs text-[#0e6231]">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <Sparkles size={13} className="text-emerald-600 fill-emerald-600" />
+                  1st Time Buyer? Get 10% OFF at checkout!
+                </span>
+                <span className="text-[10px] font-black uppercase bg-[#0e6231] text-white px-2.5 py-0.5 rounded-full shadow-2xs">
+                  Save ₹1,400
+                </span>
+              </div>
             </div>
 
             {/* 6 Key Technical Specs Grid (3 Cols × 2 Rows on Desktop, 2 Cols on Mobile) */}

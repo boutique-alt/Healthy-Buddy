@@ -26,6 +26,16 @@ interface CartContextType {
   sendWhatsAppOrder: (customer: OrderCustomerDetails) => void;
   toast: CartToastData | null;
   dismissToast: () => void;
+  // First-Time Customer Discount Checkbox System
+  isFirstTimeCustomer: boolean | null;
+  isCheckingCustomer: boolean;
+  applyFirstTimeDiscount: boolean;
+  setApplyFirstTimeDiscount: (apply: boolean) => void;
+  checkPhoneNumber: (phone: string) => Promise<{ exists: boolean; isFirstTime: boolean; message: string }>;
+  discountAmount: number;
+  finalTotal: number;
+  customerStatusMessage: string;
+  resetCustomerCheck: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -37,6 +47,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [toast, setToast] = useState<CartToastData | null>(null);
+
+  // First-Time Buyer state
+  const [isFirstTimeCustomer, setIsFirstTimeCustomer] = useState<boolean | null>(null);
+  const [isCheckingCustomer, setIsCheckingCustomer] = useState(false);
+  const [applyFirstTimeDiscount, setApplyFirstTimeDiscount] = useState(true);
+  const [customerStatusMessage, setCustomerStatusMessage] = useState('');
 
   const dismissToast = useCallback(() => {
     setToast(null);
@@ -112,7 +128,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           item.id === productId ? { ...item, qty: item.qty - 1 } : item
         )
         .filter((item) => item.qty > 0)
-    );
+      );
   }, []);
 
   const clearCart = useCallback(() => {
@@ -127,12 +143,95 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return items.reduce((total, item) => total + item.price * item.qty, 0);
   }, [items]);
 
+  // 10% Discount on subtotal
+  const discountAmount = useMemo(() => {
+    if (subtotal <= 0) return 0;
+    return Math.round(subtotal * 0.10);
+  }, [subtotal]);
+
+  // Final total: if first-time and checked, subtract 10%
+  const finalTotal = useMemo(() => {
+    if (isFirstTimeCustomer === true && applyFirstTimeDiscount) {
+      return Math.max(0, subtotal - discountAmount);
+    }
+    return subtotal;
+  }, [subtotal, isFirstTimeCustomer, applyFirstTimeDiscount, discountAmount]);
+
+  // Real-time phone check function
+  const checkPhoneNumber = useCallback(async (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length < 10) {
+      setIsFirstTimeCustomer(null);
+      setCustomerStatusMessage('');
+      return { exists: false, isFirstTime: false, message: '' };
+    }
+
+    setIsCheckingCustomer(true);
+    try {
+      const res = await fetch('/api/check-customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: digits }),
+      });
+      const data = await res.json();
+
+      if (data.exists) {
+        // Returning customer: disable discount
+        setIsFirstTimeCustomer(false);
+        setApplyFirstTimeDiscount(false);
+        setCustomerStatusMessage('Returning Customer: Number previously registered. 1st-time discount not applicable.');
+      } else {
+        // First-time customer: enable discount
+        setIsFirstTimeCustomer(true);
+        setApplyFirstTimeDiscount(true);
+        setCustomerStatusMessage('Verified 1st-Time Customer! You are eligible for 10% discount.');
+      }
+      return data;
+    } catch (e) {
+      console.error('Failed to check phone number:', e);
+      // Fallback: allow discount if network fails
+      setIsFirstTimeCustomer(true);
+      setApplyFirstTimeDiscount(true);
+      return { exists: false, isFirstTime: true, message: 'Verified 1st time customer' };
+    } finally {
+      setIsCheckingCustomer(false);
+    }
+  }, []);
+
+  const resetCustomerCheck = useCallback(() => {
+    setIsFirstTimeCustomer(null);
+    setCustomerStatusMessage('');
+  }, []);
+
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
 
   const sendWhatsAppOrder = useCallback(
-    (customer: OrderCustomerDetails) => {
+    async (customer: OrderCustomerDetails) => {
       if (items.length === 0) return;
+
+      const isDiscountClaimed = isFirstTimeCustomer === true && applyFirstTimeDiscount;
+      const actualDiscount = isDiscountClaimed ? discountAmount : 0;
+      const payableAmount = subtotal - actualDiscount;
+
+      // Asynchronously record the order in background
+      try {
+        fetch('/api/record-customer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: customer.phone.replace(/\D/g, ''),
+            name: customer.name.trim(),
+            address: customer.address.trim(),
+            pincode: customer.pincode.trim(),
+            discountClaimed: isDiscountClaimed,
+            discountAmount: actualDiscount,
+            totalAmount: payableAmount,
+          }),
+        }).catch((err) => console.error('Error saving order record:', err));
+      } catch (e) {
+        // Non-blocking
+      }
 
       const dateStr = new Date().toLocaleDateString('en-IN', {
         day: 'numeric',
@@ -155,24 +254,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         message += `📝 Note: ${customer.notes.trim()}\n`;
       }
 
+      message += `\n*SYSTEM VERIFICATION:*\n`;
+      if (isDiscountClaimed) {
+        message += `🏷️ Status: ✅ *FIRST-TIME BUYER (10% DISCOUNT CLAIMED)*\n`;
+        message += `🎁 Discount: -₹${discountAmount.toLocaleString('en-IN')}\n`;
+      } else if (isFirstTimeCustomer === false) {
+        message += `🏷️ Status: 👤 *RETURNING CUSTOMER (No 1st-Time Discount)*\n`;
+      } else {
+        message += `🏷️ Status: 📦 Standard Order\n`;
+      }
+
       message += `\n*ORDER ITEMS (${count}):*\n`;
       items.forEach((item, index) => {
         const lineTotal = item.price * item.qty;
         message += `${index + 1}. *${item.name}*\n`;
-        message += `   Qty: ${item.qty} × ₹${item.price} = ₹${lineTotal}\n`;
+        message += `   Qty: ${item.qty} × ₹${item.price.toLocaleString('en-IN')} = ₹${lineTotal.toLocaleString('en-IN')}\n`;
       });
 
       message += `\n──────────────────\n`;
-      message += `💰 *TOTAL PAYABLE: ₹${subtotal.toLocaleString('en-IN')}*\n`;
+      message += `Subtotal: ₹${subtotal.toLocaleString('en-IN')}\n`;
+      if (isDiscountClaimed) {
+        message += `1st Order Discount (10%): -₹${discountAmount.toLocaleString('en-IN')}\n`;
+      }
+      message += `Delivery: FREE Direct Delivery\n`;
+      message += `💰 *TOTAL PAYABLE: ₹${payableAmount.toLocaleString('en-IN')}*\n`;
       message += `──────────────────\n`;
-      message += `_Sent via Healthy Buddy Official Landing Page_`;
+      message += `_Sent via Healthy Buddy Verified Checkout System_`;
 
       const encodedMsg = encodeURIComponent(message);
       const url = `https://wa.me/${BRAND_INFO.whatsappNumber}?text=${encodedMsg}`;
 
       window.open(url, '_blank');
     },
-    [items, count, subtotal]
+    [items, count, subtotal, isFirstTimeCustomer, applyFirstTimeDiscount, discountAmount]
   );
 
   return (
@@ -193,6 +307,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         sendWhatsAppOrder,
         toast,
         dismissToast,
+        isFirstTimeCustomer,
+        isCheckingCustomer,
+        applyFirstTimeDiscount,
+        setApplyFirstTimeDiscount,
+        checkPhoneNumber,
+        discountAmount,
+        finalTotal,
+        customerStatusMessage,
+        resetCustomerCheck,
       }}
     >
       {children}

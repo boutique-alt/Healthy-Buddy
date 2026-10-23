@@ -1,0 +1,22 @@
+[
+  {
+    "phone": "9330266857",
+    "name": "Hasibul",
+    "firstOrderDate": "2026-10-23T07:53:51.996Z",
+    "lastOrder": "2026-10-23T07:53:51.996Z",
+    "ordersCount": 1,
+    "firstTimeDiscountClaimed": true,
+    "orders": [
+      {
+        "phone": "9330266857",
+        "name": "Hasibul",
+        "address": "kolkata",
+        "pincode": "700151",
+        "discountClaimed": true,
+        "discountAmount": 1400,
+        "totalAmount": 12599,
+        "date": "2026-10-23T07:53:51.996Z"
+      }
+    ]
+  }
+]

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '../components/Navbar';
+import { MovingAnnouncementBar } from '../components/MovingAnnouncementBar';
 import { HeroSection } from '../components/HeroSection';
 import { ProductShowcase } from '../components/ProductShowcase';
 import { InternalEngineering } from '../components/InternalEngineering';
@@ -19,6 +20,9 @@ export default function Home() {
     <main className="min-h-screen flex flex-col bg-white">
       {/* 0. Floating Alert Toast for Add to Cart */}
       <CartAlertToast />
+
+      {/* 0.1 Moving Top Marquee Announcement Bar */}
+      <MovingAnnouncementBar />
 
       {/* 1. Sticky Navigation Header */}
       <Navbar />
