@@ -18,5 +18,51 @@
         "date": "2026-10-23T07:53:51.996Z"
       }
     ]
+  },
+  {
+    "phone": "9800000001",
+    "name": "Anuradha Sharma",
+    "firstOrderDate": "2026-10-23T10:08:45.521Z",
+    "lastOrder": "2026-10-23T10:08:45.521Z",
+    "ordersCount": 1,
+    "firstTimeDiscountClaimed": true,
+    "orders": [
+      {
+        "phone": "9800000001",
+        "name": "Anuradha Sharma",
+        "address": "Sonipat, Haryana 131101",
+        "pincode": "131101",
+        "notes": "Handle with care, delicate glass chamber",
+        "items": "Healthy Buddy Alkaline Device (Qty: 1)",
+        "discountClaimed": true,
+        "discountAmount": 1400,
+        "totalAmount": 12599,
+        "customerType": "First-Time Buyer (10% Off Claimed)",
+        "date": "2026-10-23T10:08:45.521Z"
+      }
+    ]
+  },
+  {
+    "phone": "1234567890",
+    "name": "pixelsolution",
+    "firstOrderDate": "2026-10-23T10:12:48.678Z",
+    "lastOrder": "2026-10-23T10:12:48.678Z",
+    "ordersCount": 1,
+    "firstTimeDiscountClaimed": true,
+    "orders": [
+      {
+        "phone": "1234567890",
+        "name": "pixelsolution",
+        "address": "kolkata",
+        "pincode": "700151",
+        "notes": "",
+        "items": "Healthy Buddy AquaLife+ H2 Magnetic Alkaline Water Device (Qty: 1)",
+        "discountClaimed": true,
+        "discountAmount": 1400,
+        "totalAmount": 12599,
+        "customerType": "First-Time Buyer (10% Off Claimed)",
+        "date": "2026-10-23T10:12:48.678Z"
+      }
+    ]
   }
 ]

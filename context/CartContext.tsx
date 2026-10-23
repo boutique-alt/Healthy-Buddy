@@ -216,6 +216,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       // Asynchronously record the order in background
       try {
+        const itemsSummary = items
+          .map((item) => `${item.name} (Qty: ${item.qty})`)
+          .join(', ');
+
+        const customerTypeStr = isDiscountClaimed
+          ? 'First-Time Buyer (10% Off Claimed)'
+          : isFirstTimeCustomer === false
+          ? 'Returning Customer'
+          : 'First-Time Customer';
+
         fetch('/api/record-customer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -224,6 +234,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             name: customer.name.trim(),
             address: customer.address.trim(),
             pincode: customer.pincode.trim(),
+            notes: customer.notes?.trim() || '',
+            items: itemsSummary,
+            customerType: customerTypeStr,
             discountClaimed: isDiscountClaimed,
             discountAmount: actualDiscount,
             totalAmount: payableAmount,
