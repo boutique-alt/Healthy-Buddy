@@ -64,5 +64,28 @@
         "date": "2026-10-23T10:12:48.678Z"
       }
     ]
+  },
+  {
+    "phone": "9876500000",
+    "name": "Vercel Await Test",
+    "firstOrderDate": "2026-10-23T10:29:27.640Z",
+    "lastOrder": "2026-10-23T10:29:27.640Z",
+    "ordersCount": 1,
+    "firstTimeDiscountClaimed": false,
+    "orders": [
+      {
+        "phone": "9876500000",
+        "name": "Vercel Await Test",
+        "address": "Kolkata, WB",
+        "pincode": "700001",
+        "notes": "Verifying await behavior",
+        "items": "Healthy Buddy Alkaline Device (Qty: 1)",
+        "discountClaimed": false,
+        "discountAmount": 0,
+        "totalAmount": 13999,
+        "customerType": "First-Time Buyer",
+        "date": "2026-10-23T10:29:27.640Z"
+      }
+    ]
   }
 ]

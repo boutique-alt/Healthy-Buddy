@@ -229,6 +229,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         fetch('/api/record-customer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
           body: JSON.stringify({
             phone: customer.phone.replace(/\D/g, ''),
             name: customer.name.trim(),

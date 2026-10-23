@@ -14,7 +14,11 @@ function normalizePhone(rawPhone: string): string {
 
 function getCustomers(): Array<any> {
   try {
-    const filePath = path.join(process.cwd(), 'data', 'customers.json');
+    const isVercel = Boolean(process.env.VERCEL);
+    const filePath = isVercel
+      ? path.join('/tmp', 'customers.json')
+      : path.join(process.cwd(), 'data', 'customers.json');
+
     if (!fs.existsSync(filePath)) {
       return [];
     }
@@ -28,7 +32,12 @@ function getCustomers(): Array<any> {
 
 function saveCustomers(customers: Array<any>): boolean {
   try {
-    const filePath = path.join(process.cwd(), 'data', 'customers.json');
+    const isVercel = Boolean(process.env.VERCEL);
+    const dirPath = isVercel ? '/tmp' : path.join(process.cwd(), 'data');
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+    const filePath = path.join(dirPath, 'customers.json');
     fs.writeFileSync(filePath, JSON.stringify(customers, null, 2), 'utf-8');
     return true;
   } catch (error) {
@@ -49,18 +58,28 @@ async function forwardToGoogleSheet(orderData: {
   totalAmount: string;
   notes: string;
 }) {
-  if (!GOOGLE_SHEET_WEBHOOK_URL) return;
+  if (!GOOGLE_SHEET_WEBHOOK_URL) {
+    console.warn('GOOGLE_SHEET_WEBHOOK_URL is not defined');
+    return null;
+  }
   try {
+    console.log('Sending order to Google Sheet:', GOOGLE_SHEET_WEBHOOK_URL);
     const response = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(orderData),
       redirect: 'follow',
+      cache: 'no-store',
     });
+
     const text = await response.text();
-    console.log('Google Sheet sync response:', text);
+    console.log('Google Sheet response status:', response.status, 'body:', text);
+    return text;
   } catch (err) {
     console.error('Failed to forward order to Google Sheet:', err);
+    return null;
   }
 }
 
@@ -107,7 +126,6 @@ export async function POST(request: Request) {
     };
 
     if (isReturning) {
-      // Customer has ordered before, increment order count and update last order date
       customers[existingIndex].ordersCount = (customers[existingIndex].ordersCount || 1) + 1;
       customers[existingIndex].lastOrder = now;
       if (!customers[existingIndex].orders) {
@@ -115,7 +133,6 @@ export async function POST(request: Request) {
       }
       customers[existingIndex].orders.push(orderRecord);
     } else {
-      // New first-time customer
       customers.push({
         phone,
         name: body.name || 'Anonymous',
@@ -129,7 +146,6 @@ export async function POST(request: Request) {
 
     saveCustomers(customers);
 
-    // Forward to Google Sheet in the background (non-blocking for fast checkout)
     const discountText = Boolean(body.discountClaimed)
       ? `Yes (-₹${(Number(body.discountAmount) || 0).toLocaleString('en-IN')})`
       : 'No';
@@ -147,14 +163,13 @@ export async function POST(request: Request) {
       notes: body.notes || '',
     };
 
-    // Trigger async push to Google Sheet without blocking response
-    forwardToGoogleSheet(sheetPayload).catch((e) =>
-      console.error('Async Google Sheet sync error:', e)
-    );
+    // CRITICAL FOR VERCEL SERVERLESS: Must AWAIT so Lambda container does not terminate before sync finishes!
+    const sheetSyncResult = await forwardToGoogleSheet(sheetPayload);
 
     return NextResponse.json({
       success: true,
-      message: 'Order recorded locally and synced to Google Sheets successfully',
+      sheetSynced: Boolean(sheetSyncResult),
+      message: 'Order recorded and synced to Google Sheets successfully',
     });
   } catch (error) {
     console.error('API record-customer error:', error);
