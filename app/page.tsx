@@ -10,6 +10,7 @@ import { HealthBenefitsStory } from '../components/HealthBenefitsStory';
 import { ThreeWeeksTransformation } from '../components/ThreeWeeksTransformation';
 import { FirstDrinkComparison } from '../components/FirstDrinkComparison';
 import { WhyUs } from '../components/WhyUs';
+import { TestimonialsSection } from '../components/TestimonialsSection';
 import { FAQSection } from '../components/FAQSection';
 import { Footer } from '../components/Footer';
 import { CartDrawer } from '../components/CartDrawer';
@@ -48,7 +49,10 @@ export default function Home() {
       {/* 8. Verified Specifications Table, Family Trust & Quality Certifications */}
       <WhyUs />
 
-      {/* 9. Frequently Asked Questions & Customer Helpdesk */}
+      {/* 9. Real Doctor & Customer Testimonials (Infinite Marquee) */}
+      <TestimonialsSection />
+
+      {/* 10. Frequently Asked Questions & Customer Helpdesk */}
       <FAQSection />
 
       {/* 10. Official Footer with Manufacturer Info & Social Contacts */}

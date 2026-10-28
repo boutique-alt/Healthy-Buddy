@@ -49,7 +49,7 @@ const FAQS_DATA: FaqItem[] = [
   {
     num: '06',
     q: 'How can I order and what are the delivery options?',
-    a: 'You can order directly on our website by clicking "Add to Cart" or chat with our team on WhatsApp at +91 80532 03357 (Mrs. Anuradha). We offer free express doorstep delivery across India with full order tracking.',
+    a: 'You can order directly on our website by clicking "Add to Cart" or chat with our team on WhatsApp at +91 98300 22991. We offer free express doorstep delivery across India with full order tracking.',
   },
 ];
 
@@ -61,7 +61,7 @@ export function FAQSection() {
   };
 
   const whatsappUrl = `https://wa.me/${BRAND_INFO.whatsappNumber}?text=${encodeURIComponent(
-    'Hello Mrs. Anuradha, I want to inquire about the Healthy Buddy Alkaline Water Device offers.'
+    'Hello Healthy Buddy Team, I want to inquire about the Alkaline Water Device offers.'
   )}`;
 
   return (
@@ -210,7 +210,7 @@ export function FAQSection() {
           <div className="hidden md:block relative w-full aspect-[2910/261] rounded-3xl overflow-hidden shadow-md border border-gray-200/90 bg-white select-none group">
             <Image
               src="/images/faq_bottom_support_banner_3x.png"
-              alt="Speak directly with Mrs. Anuradha - Contact on WhatsApp"
+              alt="Connect with Healthy Buddy - WhatsApp Support"
               fill
               className="object-contain transition-transform duration-500 group-hover:scale-[1.005]"
               priority
@@ -223,7 +223,7 @@ export function FAQSection() {
               target="_blank"
               rel="noopener noreferrer"
               className="absolute left-[34%] top-[50%] w-[32%] h-[40%] rounded-full cursor-pointer z-20 group"
-              title="Contact Mrs. Anuradha on WhatsApp"
+              title="Connect with Healthy Buddy on WhatsApp"
             >
               <span className="sr-only">Contact on WhatsApp</span>
             </a>
@@ -237,7 +237,7 @@ export function FAQSection() {
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#167d40] shadow-sm bg-white">
                   <Image
                     src="/images/faq_support_avatar.png"
-                    alt="Mrs. Anuradha - Healthy Buddy Support"
+                    alt="Healthy Buddy Support Team"
                     width={64}
                     height={64}
                     className="object-cover w-full h-full"
@@ -259,7 +259,7 @@ export function FAQSection() {
                 Still have questions? We&apos;re here to help!
               </h3>
               <p className="text-xs text-gray-600 leading-relaxed max-w-xs mx-auto">
-                Speak directly with <strong className="text-gray-900 font-bold">{BRAND_INFO.contactPerson}</strong> for instant answers, orders, and personalized advice.
+                Connect directly with <strong className="text-gray-900 font-bold">{BRAND_INFO.contactPerson}</strong> for instant answers, orders, and personalized advice.
               </p>
             </div>
 
@@ -272,7 +272,7 @@ export function FAQSection() {
                 className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#25D366] hover:bg-[#1ebd5a] text-white font-bold text-sm shadow-md shadow-[#25D366]/20 transition-all active:scale-[0.98]"
               >
                 <MessageCircle size={18} className="fill-white" />
-                <span>Chat on WhatsApp (+91 80532 03357)</span>
+                <span>Chat on WhatsApp (+91 98300 22991)</span>
               </a>
             </div>
 

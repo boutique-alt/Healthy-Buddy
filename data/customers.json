@@ -3,8 +3,8 @@
     "phone": "9330266857",
     "name": "Hasibul",
     "firstOrderDate": "2026-10-23T07:53:51.996Z",
-    "lastOrder": "2026-10-23T07:53:51.996Z",
-    "ordersCount": 1,
+    "lastOrder": "2026-10-28T07:27:41.058Z",
+    "ordersCount": 4,
     "firstTimeDiscountClaimed": true,
     "orders": [
       {
@@ -16,6 +16,45 @@
         "discountAmount": 1400,
         "totalAmount": 12599,
         "date": "2026-10-23T07:53:51.996Z"
+      },
+      {
+        "phone": "9330266857",
+        "name": "Hasibul Pailan",
+        "address": "kolkata",
+        "pincode": "700151",
+        "notes": "[Sent to Desk 1 (+91 98300 22991)]",
+        "items": "Healthy Buddy AquaLife+ H2 Magnetic Alkaline Water Device (Qty: 1)",
+        "discountClaimed": false,
+        "discountAmount": 0,
+        "totalAmount": 13999,
+        "customerType": "Returning Customer",
+        "date": "2026-10-28T07:00:06.286Z"
+      },
+      {
+        "phone": "9330266857",
+        "name": "Hasibul Pailan",
+        "address": "kolkata",
+        "pincode": "700151",
+        "notes": "[Sent to Desk 2 (+91 92300 22991)]",
+        "items": "Healthy Buddy AquaLife+ H2 Magnetic Alkaline Water Device (Qty: 1)",
+        "discountClaimed": false,
+        "discountAmount": 0,
+        "totalAmount": 13999,
+        "customerType": "Returning Customer",
+        "date": "2026-10-28T07:00:36.456Z"
+      },
+      {
+        "phone": "9330266857",
+        "name": "Hasibul Pailan",
+        "address": "kolkata",
+        "pincode": "700151",
+        "notes": "",
+        "items": "Healthy Buddy AquaLife+ H2 Magnetic Alkaline Water Device (Qty: 1)",
+        "discountClaimed": false,
+        "discountAmount": 0,
+        "totalAmount": 13999,
+        "customerType": "Returning Customer",
+        "date": "2026-10-28T07:27:41.058Z"
       }
     ]
   },

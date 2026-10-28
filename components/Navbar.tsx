@@ -124,6 +124,14 @@ export function Navbar() {
                 All Products
               </Link>
 
+              {/* Testimonials */}
+              <Link
+                href="#testimonials"
+                className="font-semibold text-gray-700 hover:text-[#085432] transition-colors"
+              >
+                Testimonials
+              </Link>
+
               {/* Contact */}
               <Link
                 href="#contact"
@@ -170,7 +178,7 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat on WhatsApp"
-              title="Chat with Mrs. Anuradha on WhatsApp"
+              title="Connect with Healthy Buddy on WhatsApp"
               className="flex items-center justify-center w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-[#ebfaef] border border-[#b8ecc6] text-[#25D366] hover:bg-[#def7e4] hover:border-[#25D366] transition-all duration-200 active:scale-95 shadow-xs"
             >
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -240,6 +248,13 @@ export function Navbar() {
             className="block text-gray-700 font-semibold text-base py-2 hover:text-[#085432] border-b border-gray-50"
           >
             All Products
+          </Link>
+          <Link
+            href="#testimonials"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-gray-700 font-semibold text-base py-2 hover:text-[#085432] border-b border-gray-50"
+          >
+            Testimonials
           </Link>
           <Link
             href="#contact"

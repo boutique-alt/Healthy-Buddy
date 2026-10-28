@@ -35,9 +35,9 @@ export const BRAND_INFO = {
   subtagline: 'Walking The Journey Together',
   company: 'Ad Herbalnest Private Limited / Healthy Buddy Wellness',
   address: 'Sonipat, Haryana - 131101, India',
-  phoneDisplay: '+91 80532 03357',
-  whatsappNumber: '918053203357',
-  contactPerson: 'Mrs. Anuradha',
+  phoneDisplay: '+91 98300 22991',
+  whatsappNumber: '919830022991',
+  contactPerson: 'Healthy Buddy Support',
   email: 'info@healthybuddy.co.in',
   website: 'www.healthybuddy.co.in',
   socialLinks: {

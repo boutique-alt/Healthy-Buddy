@@ -1,19 +1,6 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, Caveat } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '../context/CartContext';
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-sans',
-});
-
-const caveat = Caveat({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  variable: '--font-caveat',
-});
 
 export const metadata: Metadata = {
   title: 'Healthy Buddy • Pure Water • Better Health | Hope • Health • Happiness',
@@ -30,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${caveat.variable}`}>
+    <html lang="en">
       <body className="antialiased font-sans bg-white text-gray-900 selection:bg-brand-soft selection:text-brand-dark">
         <CartProvider>
           {children}
