@@ -29,7 +29,7 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   {
     id: 'dr-manoj-chakraborty',
     name: 'Dr. Manoj Chakraborty',
-    role: 'Medical Practitioner',
+    role: 'Health Consultant',
     isDoctor: true,
     avatarText: 'MC',
     avatarBg: 'from-teal-600 to-emerald-800',
@@ -53,7 +53,7 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   {
     id: 'dr-kavita-modi',
     name: 'Dr. Kavita Modi',
-    role: 'Medical Doctor',
+    role: 'Health & Wellness Consultant',
     isDoctor: true,
     avatarText: 'KM',
     avatarBg: 'from-emerald-600 to-teal-800',
@@ -64,8 +64,8 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   },
   {
     id: 'rajendra-chotia',
-    name: 'Rajendra Chotia',
-    role: 'Working Professional',
+    name: 'CS Rajendra Chotia',
+    role: 'Business Consultant & Professional CS',
     location: 'Kolkata',
     avatarText: 'RC',
     avatarBg: 'from-emerald-800 to-green-950',
@@ -77,7 +77,7 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   {
     id: 'dr-sujata-agarwal',
     name: 'Dr. Sujata Agarwal',
-    role: 'Doctor & Working Woman',
+    role: 'Lifestyle Coach',
     location: 'Kolkata',
     isDoctor: true,
     avatarText: 'SA',
@@ -90,7 +90,7 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   {
     id: 'navin-joshi',
     name: 'Navin Joshi',
-    role: 'Verified Buyer',
+    role: 'Finance Advisor',
     location: 'Kolkata',
     avatarText: 'NJ',
     avatarBg: 'from-green-700 to-emerald-950',
@@ -102,7 +102,7 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
   {
     id: 'sanjay-chaudhary',
     name: 'Sanjay Chaudhary',
-    role: 'Family Head & Father',
+    role: 'Cancer Survivor & AI & IT Tech Expert',
     avatarText: 'SC',
     avatarBg: 'from-green-800 to-teal-950',
     rating: 5,
