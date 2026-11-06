@@ -10,8 +10,6 @@ import {
   MessageCircle,
   Heart,
   ShieldCheck,
-  MapPin,
-  ExternalLink,
 } from 'lucide-react';
 import { BRAND_INFO } from '../data/products';
 
@@ -46,10 +44,6 @@ export function Footer() {
                 <ShieldCheck size={16} className="text-emerald-400" />
                 <span>100% Purity Guaranteed • ISO &amp; GMP Certified</span>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-emerald-400" />
-                <span>Sonipat, Haryana - 131101, India</span>
-              </div>
             </div>
           </div>
 
@@ -75,15 +69,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="https://amzn.in/d/05t8Cr3X"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-emerald-300 transition-colors flex items-center gap-1.5"
-                >
-                  <span>Amazon Store Link</span>
-                  <ExternalLink size={12} />
-                </a>
+                <Link href="#testimonials" className="hover:text-emerald-300 transition-colors">
+                  Customer &amp; Doctor Reviews
+                </Link>
               </li>
             </ul>
           </div>

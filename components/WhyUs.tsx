@@ -132,7 +132,7 @@ export function WhyUs() {
                 <span>🇮🇳</span>
                 <span className="font-bold text-gray-900">Made in India</span>
                 <span className="text-gray-500">•</span>
-                <span className="text-gray-700">Manufactured in Haryana</span>
+                <span className="text-gray-700">Pan-India Express Delivery</span>
               </div>
             </div>
           </div>
